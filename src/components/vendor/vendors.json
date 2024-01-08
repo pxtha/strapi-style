@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_vendor_vendors",
+  "info": {
+    "displayName": "Vendors",
+    "icon": "store"
+  },
+  "options": {},
+  "attributes": {
+    "vendors": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::vendor.vendor"
+    }
+  }
+}

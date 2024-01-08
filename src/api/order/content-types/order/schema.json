@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "Order",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "OrderCreated",
+        "OrderPendingPayment",
+        "OrderProccessing",
+        "OrderCompleted"
+      ]
+    },
+    "shipping_information_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::shipping-information.shipping-information"
+    },
+    "stripe_id": {
+      "type": "text"
+    }
+  }
+}

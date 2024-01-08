@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_deal_deals",
+  "info": {
+    "displayName": "Deals",
+    "icon": "archive",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "deal_of_the_day": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product"
+    },
+    "outlets": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_feature_features",
+  "info": {
+    "displayName": "Feature",
+    "icon": "shoppingCart"
+  },
+  "options": {},
+  "attributes": {
+    "products": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product"
+    }
+  }
+}

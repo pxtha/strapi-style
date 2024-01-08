@@ -1,0 +1,12 @@
+{
+  "collectionName": "components_orginal_orginals",
+  "info": {
+    "displayName": "orginal"
+  },
+  "options": {},
+  "attributes": {
+    "orginal": {
+      "type": "string"
+    }
+  }
+}

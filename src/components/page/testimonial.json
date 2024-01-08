@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_page_testimonials",
+  "info": {
+    "displayName": "testimonial",
+    "icon": "emotionHappy"
+  },
+  "options": {},
+  "attributes": {
+    "testimonial": {
+      "type": "text"
+    },
+    "userprofile": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

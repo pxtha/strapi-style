@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "shipping_informations",
+  "info": {
+    "singularName": "shipping-information",
+    "pluralName": "shipping-informations",
+    "displayName": "Shipping Information"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "stress": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "zipcode": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "phone_number": {
+      "type": "string"
+    }
+  }
+}

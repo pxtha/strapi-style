@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_page_hero_banners",
+  "info": {
+    "displayName": "hero banner",
+    "icon": "cube"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "cover": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

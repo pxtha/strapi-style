@@ -573,6 +573,50 @@ export interface PluginContentReleasesReleaseAction
   };
 }
 
+export interface PluginI18NLocale extends Schema.CollectionType {
+  collectionName: 'i18n_locale';
+  info: {
+    singularName: 'locale';
+    pluralName: 'locales';
+    collectionName: 'locales';
+    displayName: 'Locale';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    name: Attribute.String &
+      Attribute.SetMinMax<{
+        min: 1;
+        max: 50;
+      }>;
+    code: Attribute.String & Attribute.Unique;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::i18n.locale',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::i18n.locale',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUsersPermissionsPermission
   extends Schema.CollectionType {
   collectionName: 'up_permissions';
@@ -678,7 +722,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
     username: Attribute.String &
@@ -707,6 +750,8 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    full_name: Attribute.String;
+    dob: Attribute.Date;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -724,14 +769,164 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
-export interface PluginI18NLocale extends Schema.CollectionType {
-  collectionName: 'i18n_locale';
+export interface PluginCommentManagerComment extends Schema.CollectionType {
+  collectionName: 'comments';
   info: {
-    singularName: 'locale';
-    pluralName: 'locales';
-    collectionName: 'locales';
-    displayName: 'Locale';
+    singularName: 'comment';
+    pluralName: 'comments';
+    displayName: 'Comment';
     description: '';
+  };
+  options: {
+    draftAndPublish: false;
+    comment: '';
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    content: Attribute.Text;
+    author: Attribute.Relation<
+      'plugin::comment-manager.comment',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    subcomments: Attribute.Relation<
+      'plugin::comment-manager.comment',
+      'oneToMany',
+      'plugin::comment-manager.subcomment'
+    >;
+    from_admin: Attribute.Boolean;
+    related_to: Attribute.Relation<
+      'plugin::comment-manager.comment',
+      'manyToOne',
+      'plugin::comment-manager.content-id'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::comment-manager.comment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::comment-manager.comment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface PluginCommentManagerSubcomment extends Schema.CollectionType {
+  collectionName: 'subcomments';
+  info: {
+    singularName: 'subcomment';
+    pluralName: 'subcomments';
+    displayName: 'Subcomment';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+    comment: '';
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    content: Attribute.Text;
+    author: Attribute.Relation<
+      'plugin::comment-manager.subcomment',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    parent_comment: Attribute.Relation<
+      'plugin::comment-manager.subcomment',
+      'manyToOne',
+      'plugin::comment-manager.comment'
+    >;
+    from_admin: Attribute.Boolean;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::comment-manager.subcomment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::comment-manager.subcomment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface PluginCommentManagerContentId extends Schema.CollectionType {
+  collectionName: 'content_ids';
+  info: {
+    singularName: 'content-id';
+    pluralName: 'content-ids';
+    displayName: 'ContentID';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+    comment: '';
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    slug: Attribute.String & Attribute.Unique;
+    comments: Attribute.Relation<
+      'plugin::comment-manager.content-id',
+      'oneToMany',
+      'plugin::comment-manager.comment'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::comment-manager.content-id',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::comment-manager.content-id',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface PluginCommentsComment extends Schema.CollectionType {
+  collectionName: 'comments_comment';
+  info: {
+    tableName: 'plugin-comments-comments';
+    singularName: 'comment';
+    pluralName: 'comments';
+    displayName: 'Comment';
+    description: 'Comment content type';
+    kind: 'collectionType';
   };
   options: {
     draftAndPublish: false;
@@ -745,22 +940,311 @@ export interface PluginI18NLocale extends Schema.CollectionType {
     };
   };
   attributes: {
-    name: Attribute.String &
-      Attribute.SetMinMax<{
-        min: 1;
-        max: 50;
-      }>;
-    code: Attribute.String & Attribute.Unique;
+    content: Attribute.Text & Attribute.Required;
+    blocked: Attribute.Boolean & Attribute.DefaultTo<false>;
+    blockedThread: Attribute.Boolean & Attribute.DefaultTo<false>;
+    blockReason: Attribute.String;
+    authorUser: Attribute.Relation<
+      'plugin::comments.comment',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    authorId: Attribute.String;
+    authorName: Attribute.String;
+    authorEmail: Attribute.Email;
+    authorAvatar: Attribute.String;
+    isAdminComment: Attribute.Boolean;
+    removed: Attribute.Boolean;
+    approvalStatus: Attribute.String;
+    related: Attribute.String;
+    reports: Attribute.Relation<
+      'plugin::comments.comment',
+      'oneToMany',
+      'plugin::comments.comment-report'
+    >;
+    threadOf: Attribute.Relation<
+      'plugin::comments.comment',
+      'oneToOne',
+      'plugin::comments.comment'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'plugin::i18n.locale',
+      'plugin::comments.comment',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'plugin::i18n.locale',
+      'plugin::comments.comment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface PluginCommentsCommentReport extends Schema.CollectionType {
+  collectionName: 'comments_comment-report';
+  info: {
+    tableName: 'plugin-comments-reports';
+    singularName: 'comment-report';
+    pluralName: 'comment-reports';
+    displayName: 'Reports';
+    description: 'Reports content type';
+    kind: 'collectionType';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    content: Attribute.Text;
+    reason: Attribute.Enumeration<['BAD_LANGUAGE', 'DISCRIMINATION', 'OTHER']> &
+      Attribute.Required &
+      Attribute.DefaultTo<'OTHER'>;
+    resolved: Attribute.Boolean & Attribute.DefaultTo<false>;
+    related: Attribute.Relation<
+      'plugin::comments.comment-report',
+      'manyToOne',
+      'plugin::comments.comment'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::comments.comment-report',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::comments.comment-report',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCartCart extends Schema.CollectionType {
+  collectionName: 'carts';
+  info: {
+    singularName: 'cart';
+    pluralName: 'carts';
+    displayName: 'Cart';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    product_variant_id: Attribute.Relation<
+      'api::cart.cart',
+      'oneToOne',
+      'api::product-variant.product-variant'
+    >;
+    quantity: Attribute.Integer;
+    user_id: Attribute.Relation<
+      'api::cart.cart',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::cart.cart', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::cart.cart', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCategoryCategory extends Schema.CollectionType {
+  collectionName: 'categories';
+  info: {
+    singularName: 'category';
+    pluralName: 'categories';
+    displayName: 'Category';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String;
+    parent_id: Attribute.Relation<
+      'api::category.category',
+      'oneToOne',
+      'api::category.category'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::category.category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::category.category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiInventoryInventory extends Schema.CollectionType {
+  collectionName: 'inventories';
+  info: {
+    singularName: 'inventory';
+    pluralName: 'inventories';
+    displayName: 'Inventory';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    product_variant_id: Attribute.Relation<
+      'api::inventory.inventory',
+      'oneToOne',
+      'api::product-variant.product-variant'
+    >;
+    total: Attribute.Integer;
+    reserved: Attribute.Integer;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::inventory.inventory',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::inventory.inventory',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiProductProduct extends Schema.CollectionType {
+  collectionName: 'products';
+  info: {
+    singularName: 'product';
+    pluralName: 'products';
+    displayName: 'Product';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    product_name: Attribute.String;
+    description: Attribute.String;
+    category: Attribute.Relation<
+      'api::product.product',
+      'oneToOne',
+      'api::category.category'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::product.product',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::product.product',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiProductVariantProductVariant extends Schema.CollectionType {
+  collectionName: 'product_variants';
+  info: {
+    singularName: 'product-variant';
+    pluralName: 'product-variants';
+    displayName: 'Product Variant';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    product: Attribute.Relation<
+      'api::product-variant.product-variant',
+      'oneToOne',
+      'api::product.product'
+    >;
+    size: Attribute.String;
+    colour: Attribute.String;
+    price: Attribute.Decimal;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::product-variant.product-variant',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::product-variant.product-variant',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiWishlistWishlist extends Schema.CollectionType {
+  collectionName: 'wishlists';
+  info: {
+    singularName: 'wishlist';
+    pluralName: 'wishlists';
+    displayName: 'Wishlist';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    product_variant_id: Attribute.Relation<
+      'api::wishlist.wishlist',
+      'oneToOne',
+      'api::product-variant.product-variant'
+    >;
+    user_id: Attribute.Relation<
+      'api::wishlist.wishlist',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::wishlist.wishlist',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::wishlist.wishlist',
       'oneToOne',
       'admin::user'
     > &
@@ -782,10 +1266,21 @@ declare module '@strapi/types' {
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
+      'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
-      'plugin::i18n.locale': PluginI18NLocale;
+      'plugin::comment-manager.comment': PluginCommentManagerComment;
+      'plugin::comment-manager.subcomment': PluginCommentManagerSubcomment;
+      'plugin::comment-manager.content-id': PluginCommentManagerContentId;
+      'plugin::comments.comment': PluginCommentsComment;
+      'plugin::comments.comment-report': PluginCommentsCommentReport;
+      'api::cart.cart': ApiCartCart;
+      'api::category.category': ApiCategoryCategory;
+      'api::inventory.inventory': ApiInventoryInventory;
+      'api::product.product': ApiProductProduct;
+      'api::product-variant.product-variant': ApiProductVariantProductVariant;
+      'api::wishlist.wishlist': ApiWishlistWishlist;
     }
   }
 }
