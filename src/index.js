@@ -39,13 +39,13 @@ module.exports = {
                 });
                 const relatedProducts = listProducts.results
                 console.log(relatedProducts)
-                const index = relatedProducts.findIndex(item => item.id === product.id);
+                const index = relatedProducts.findIndex(item => item.id === product?.id);
                 console.log(index)
                 return {
                   single: toEntityResponse(product),
                   prev: index > 0 ? toEntityResponse(relatedProducts[index - 1]) : null,
                   next: index < relatedProducts.length - 1 ? toEntityResponse(relatedProducts[index + 1]) : null,
-                  related: relatedProducts.filter(item => item.id !== product.id).slice(0, 5).map(item => toEntityResponse(item))
+                  related: relatedProducts.filter(item => item.id !== product?.id).slice(0, 5).map(item => toEntityResponse(item))
                 };
               }
 

@@ -52,17 +52,6 @@
       "relation": "oneToMany",
       "target": "api::product-variant.product-variant"
     },
-    "sm_pictures": {
-      "type": "media",
-      "multiple": true,
-      "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ]
-    },
     "categories": {
       "type": "relation",
       "relation": "manyToMany",
@@ -94,6 +83,14 @@
       "relation": "manyToOne",
       "target": "api::vendor.vendor",
       "inversedBy": "products"
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::review.review"
+    },
+    "additional_information": {
+      "type": "blocks"
     }
   }
 }

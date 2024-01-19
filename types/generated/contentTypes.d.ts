@@ -752,11 +752,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     >;
     full_name: Attribute.String;
     dob: Attribute.Date;
-    billing_infomation_id: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'oneToOne',
-      'api::billing-infomation.billing-infomation'
-    >;
     shipping_information_id: Attribute.Relation<
       'plugin::users-permissions.user',
       'oneToOne',
@@ -777,41 +772,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'plugin::users-permissions.user',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiBillingInfomationBillingInfomation
-  extends Schema.CollectionType {
-  collectionName: 'billing_infomations';
-  info: {
-    singularName: 'billing-infomation';
-    pluralName: 'billing-infomations';
-    displayName: 'Billing Infomation';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    street: Attribute.String;
-    city: Attribute.String;
-    state: Attribute.String;
-    zipcode: Attribute.String;
-    country: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::billing-infomation.billing-infomation',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::billing-infomation.billing-infomation',
       'oneToOne',
       'admin::user'
     > &
@@ -1042,7 +1002,6 @@ export interface ApiProductProduct extends Schema.CollectionType {
       'oneToMany',
       'api::product-variant.product-variant'
     >;
-    sm_pictures: Attribute.Media;
     categories: Attribute.Relation<
       'api::product.product',
       'manyToMany',
@@ -1062,6 +1021,12 @@ export interface ApiProductProduct extends Schema.CollectionType {
       'manyToOne',
       'api::vendor.vendor'
     >;
+    reviews: Attribute.Relation<
+      'api::product.product',
+      'oneToMany',
+      'api::review.review'
+    >;
+    additional_information: Attribute.Blocks;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1111,6 +1076,51 @@ export interface ApiProductVariantProductVariant extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::product-variant.product-variant',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiReviewReview extends Schema.CollectionType {
+  collectionName: 'reviews';
+  info: {
+    singularName: 'review';
+    pluralName: 'reviews';
+    displayName: 'Review';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    comment: Attribute.Text;
+    name: Attribute.String;
+    email: Attribute.String & Attribute.Required;
+    rating: Attribute.Integer &
+      Attribute.Required &
+      Attribute.SetMinMax<{
+        min: 0;
+        max: 5;
+      }>;
+    is_approved: Attribute.Boolean;
+    product: Attribute.Relation<
+      'api::review.review',
+      'oneToOne',
+      'api::product.product'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::review.review',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::review.review',
       'oneToOne',
       'admin::user'
     > &
@@ -1277,7 +1287,6 @@ declare module '@strapi/types' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
-      'api::billing-infomation.billing-infomation': ApiBillingInfomationBillingInfomation;
       'api::cart.cart': ApiCartCart;
       'api::category.category': ApiCategoryCategory;
       'api::home.home': ApiHomeHome;
@@ -1285,6 +1294,7 @@ declare module '@strapi/types' {
       'api::order-item.order-item': ApiOrderItemOrderItem;
       'api::product.product': ApiProductProduct;
       'api::product-variant.product-variant': ApiProductVariantProductVariant;
+      'api::review.review': ApiReviewReview;
       'api::shipping-information.shipping-information': ApiShippingInformationShippingInformation;
       'api::size.size': ApiSizeSize;
       'api::vendor.vendor': ApiVendorVendor;

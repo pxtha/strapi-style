@@ -71,11 +71,6 @@
     "dob": {
       "type": "date"
     },
-    "billing_infomation_id": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::billing-infomation.billing-infomation"
-    },
     "shipping_information_id": {
       "type": "relation",
       "relation": "oneToOne",
