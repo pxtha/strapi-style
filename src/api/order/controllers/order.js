@@ -7,6 +7,10 @@ const stripe = require('stripe')('sk_test_51OWCdNKX1zdpXEzPjctv1zFoI53arBFUtiAte
 
 const { createCoreController } = require('@strapi/strapi').factories;
 
+// Origin
+module.exports = createCoreController('api::order.order')
+
+// Custom
 module.exports = createCoreController('api::order.order', ({strapi }) => ({
   async create(ctx) {
     const {id} = ctx.state.user; //ctx.state.user contains the current authenticated user
@@ -24,6 +28,7 @@ module.exports = createCoreController('api::order.order', ({strapi }) => ({
                 name: item.product_name,
               },
               unit_amount:  Math.round(item.price * 100),
+              // add VAT
             },
             quantity: product.amount,
           }
@@ -35,8 +40,8 @@ module.exports = createCoreController('api::order.order', ({strapi }) => ({
         line_items: lineItems,
         payment_method_types: ['card'],
         mode: 'payment',
-        success_url: `http://localhost:3000?success=true`,
-        cancel_url: `http://localhost:3000?success=false`,
+        success_url: `http://192.168.52.102:3000?success=true`,
+        cancel_url: `http://192.168.52.102:3000?success=false`,
       });
 
       console.log("here", session)
@@ -48,6 +53,7 @@ module.exports = createCoreController('api::order.order', ({strapi }) => ({
             stripe_id: session.id,
             shipping_information_id: 1,
             status: 'OrderCreated',
+            total_amount: session.amount_total
           }});
 
       console.log(order)

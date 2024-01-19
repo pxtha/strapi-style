@@ -1,23 +1,15 @@
 module.exports = ({ env }) => ({
   //...
-  comments: {
-    enabled: true,
+  graphql: {
     config: {
-      badWords: false,
-      moderatorRoles: ["Authenticated"],
-      approvalFlow: ["api::page.page"],
-      entryLabel: {
-        "*": ["Title", "title", "Name", "name", "Subject", "subject"],
-        "api::page.page": ["MyField"],
-      },
-      blockedAuthorProps: ["name", "email"],
-      reportReasons: {
-        MY_CUSTOM_REASON: "MY_CUSTOM_REASON",
-      },
-      gql: {
-        // ...
+      endpoint: '/graphql',
+      shadowCRUD: true,
+      playgroundAlways: false,
+      depthLimit: 7,
+      amountLimit: 100,
+      apolloServer: {
+        tracing: false,
       },
     },
   },
-  //...
 });

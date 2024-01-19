@@ -12,13 +12,7 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "banner": {
-      "displayName": "Banner",
-      "type": "component",
-      "repeatable": false,
-      "component": "banner.banner"
-    },
-    "feature": {
+    "trending": {
       "displayName": "Feature",
       "type": "component",
       "repeatable": false,
@@ -28,6 +22,16 @@
       "type": "component",
       "repeatable": false,
       "component": "deal.deals"
+    },
+    "new_arrival": {
+      "type": "component",
+      "repeatable": false,
+      "component": "feature.feature"
+    },
+    "vendor": {
+      "type": "component",
+      "repeatable": false,
+      "component": "vendor.vendor"
     }
   }
 }

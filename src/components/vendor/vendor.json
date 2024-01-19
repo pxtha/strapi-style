@@ -1,8 +1,8 @@
 {
   "collectionName": "components_vendor_vendors",
   "info": {
-    "displayName": "Vendors",
-    "icon": "store"
+    "displayName": "vendor",
+    "description": ""
   },
   "options": {},
   "attributes": {

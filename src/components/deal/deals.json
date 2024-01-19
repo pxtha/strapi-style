@@ -7,14 +7,14 @@
   },
   "options": {},
   "attributes": {
-    "deal_of_the_day": {
+    "deal_of_the_day_1": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::product.product"
     },
-    "outlets": {
+    "deal_of_the_day_2": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "oneToOne",
       "target": "api::product.product"
     }
   }

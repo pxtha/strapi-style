@@ -33,6 +33,9 @@
     },
     "stripe_id": {
       "type": "text"
+    },
+    "total_amount": {
+      "type": "decimal"
     }
   }
 }
