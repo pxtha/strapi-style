@@ -762,6 +762,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::wishlist.wishlist'
     >;
+    carts: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::cart.cart'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -794,7 +799,7 @@ export interface ApiCartCart extends Schema.CollectionType {
     quantity: Attribute.Integer;
     user_id: Attribute.Relation<
       'api::cart.cart',
-      'oneToOne',
+      'manyToOne',
       'plugin::users-permissions.user'
     >;
     product: Attribute.Relation<
@@ -913,6 +918,11 @@ export interface ApiOrderOrder extends Schema.CollectionType {
     >;
     stripe_id: Attribute.Text;
     total_amount: Attribute.Decimal;
+    order_items: Attribute.Relation<
+      'api::order.order',
+      'oneToMany',
+      'api::order-item.order-item'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -945,15 +955,15 @@ export interface ApiOrderItemOrderItem extends Schema.CollectionType {
   attributes: {
     order_id: Attribute.Relation<
       'api::order-item.order-item',
-      'oneToOne',
+      'manyToOne',
       'api::order.order'
     >;
     quantity: Attribute.Integer;
     subtotal: Attribute.Decimal;
-    product: Attribute.Relation<
+    product_variant: Attribute.Relation<
       'api::order-item.order-item',
       'oneToOne',
-      'api::product.product'
+      'api::product-variant.product-variant'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1021,12 +1031,12 @@ export interface ApiProductProduct extends Schema.CollectionType {
       'manyToOne',
       'api::vendor.vendor'
     >;
+    additional_information: Attribute.Blocks;
     reviews: Attribute.Relation<
       'api::product.product',
       'oneToMany',
       'api::review.review'
     >;
-    additional_information: Attribute.Blocks;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1104,10 +1114,9 @@ export interface ApiReviewReview extends Schema.CollectionType {
         min: 0;
         max: 5;
       }>;
-    is_approved: Attribute.Boolean;
     product: Attribute.Relation<
       'api::review.review',
-      'oneToOne',
+      'manyToOne',
       'api::product.product'
     >;
     createdAt: Attribute.DateTime;

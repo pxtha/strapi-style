@@ -28,13 +28,11 @@
       "min": 0,
       "required": true
     },
-    "is_approved": {
-      "type": "boolean"
-    },
     "product": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::product.product"
+      "relation": "manyToOne",
+      "target": "api::product.product",
+      "inversedBy": "reviews"
     }
   }
 }

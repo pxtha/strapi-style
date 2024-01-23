@@ -84,13 +84,14 @@
       "target": "api::vendor.vendor",
       "inversedBy": "products"
     },
+    "additional_information": {
+      "type": "blocks"
+    },
     "reviews": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::review.review"
-    },
-    "additional_information": {
-      "type": "blocks"
+      "target": "api::review.review",
+      "mappedBy": "product"
     }
   }
 }

@@ -13,14 +13,18 @@ module.exports = createCoreController('api::order.order')
 // Custom
 module.exports = createCoreController('api::order.order', ({strapi }) => ({
   async create(ctx) {
-    const {id} = ctx.state.user; //ctx.state.user contains the current authenticated user
+    // const {id} = ctx.state.user; //ctx.state.user contains the current authenticated user
     const {products} = ctx.request.body;
+    // todo:
+    // create odrer
+    // order has many order-item:
+    // oder item has qty, product variant id
     try {
       const lineItems = await Promise.all(
         products.map( async (product) => {
           const item = await strapi
             .service("api::product.product")
-            .findOne(product.product)
+            .findOne(product.id)
           return {
             price_data: {
               currency: 'usd',
@@ -30,7 +34,7 @@ module.exports = createCoreController('api::order.order', ({strapi }) => ({
               unit_amount:  Math.round(item.price * 100),
               // add VAT
             },
-            quantity: product.amount,
+            quantity: product.qty,
           }
         })
       )
@@ -49,7 +53,6 @@ module.exports = createCoreController('api::order.order', ({strapi }) => ({
       const order = await strapi
         .service("api::order.order")
         .create({ data:{
-            user_id: id,
             stripe_id: session.id,
             shipping_information_id: 1,
             status: 'OrderCreated',
@@ -63,8 +66,7 @@ module.exports = createCoreController('api::order.order', ({strapi }) => ({
             .service("api::order-item.order-item")
             .create({ data:{
                 order_id: order.id,
-                quantity: orderItem.amount,
-                product: orderItem.product,
+                quantity: orderItem.qty,
               }});
         })
       )

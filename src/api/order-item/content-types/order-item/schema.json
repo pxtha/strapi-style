@@ -14,8 +14,9 @@
   "attributes": {
     "order_id": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::order.order"
+      "relation": "manyToOne",
+      "target": "api::order.order",
+      "inversedBy": "order_items"
     },
     "quantity": {
       "type": "integer"
@@ -23,10 +24,10 @@
     "subtotal": {
       "type": "decimal"
     },
-    "product": {
+    "product_variant": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::product.product"
+      "target": "api::product-variant.product-variant"
     }
   }
 }
