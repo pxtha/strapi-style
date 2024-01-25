@@ -47,11 +47,6 @@
     "start_discount_time": {
       "type": "datetime"
     },
-    "product_variants": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::product-variant.product-variant"
-    },
     "categories": {
       "type": "relation",
       "relation": "manyToMany",
@@ -91,6 +86,12 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::review.review",
+      "mappedBy": "product"
+    },
+    "product_variants": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product-variant.product-variant",
       "mappedBy": "product"
     }
   }

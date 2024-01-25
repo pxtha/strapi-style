@@ -13,28 +13,30 @@ module.exports = createCoreController('api::order.order')
 // Custom
 module.exports = createCoreController('api::order.order', ({strapi }) => ({
   async create(ctx) {
-    // const {id} = ctx.state.user; //ctx.state.user contains the current authenticated user
-    const {products} = ctx.request.body;
+    
+    const { id } = ctx.state.user; //ctx.state.user contains the current authenticated user
+    const { req } = ctx.request.body;
     // todo:
     // create odrer
     // order has many order-item:
     // oder item has qty, product variant id
     try {
       const lineItems = await Promise.all(
-        products.map( async (product) => {
+        req.products.map( async (cart) => {
           const item = await strapi
             .service("api::product.product")
-            .findOne(product.id)
+            .findOne(cart.id)
+          
+          console.log(item, "item")
           return {
             price_data: {
               currency: 'usd',
               product_data: {
                 name: item.product_name,
               },
-              unit_amount:  Math.round(item.price * 100),
-              // add VAT
+              unit_amount:  Math.round(item.sale_price ? item.sale_price * 100 : item.price * 100),
             },
-            quantity: product.qty,
+            quantity: cart.qty,
           }
         })
       )
@@ -53,20 +55,26 @@ module.exports = createCoreController('api::order.order', ({strapi }) => ({
       const order = await strapi
         .service("api::order.order")
         .create({ data:{
+            user_id: id,
             stripe_id: session.id,
-            shipping_information_id: 1,
+            shipping_information_id: req.shipping_information_id || null,
+            billing_information_id: req.billing_information_id || null,
             status: 'OrderCreated',
-            total_amount: session.amount_total
+            total_amount: session.amount_total,
+            description: req.description,
           }});
 
       console.log(order)
       await Promise.all(
-        products.map( async (orderItem) => {
+        req.products.map( async (orderItem) => {
             await strapi
             .service("api::order-item.order-item")
             .create({ data:{
                 order_id: order.id,
                 quantity: orderItem.qty,
+                product: orderItem.id,
+                product_variant: orderItem.product_variant_id,
+                size: orderItem.size_id
               }});
         })
       )
@@ -75,8 +83,9 @@ module.exports = createCoreController('api::order.order', ({strapi }) => ({
 
     } catch (err) {
       console.log(err)
-      ctx.badRequest(null, [{messages: [{id: 'Stripe.error'}]}]);
+      ctx.badRequest([{messages: [{id: 'Stripe.error'}]}]);
       return { err };
     }
-  }
+  },
+
 }))

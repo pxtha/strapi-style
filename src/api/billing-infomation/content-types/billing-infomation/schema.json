@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "billing_infomations",
+  "info": {
+    "singularName": "billing-infomation",
+    "pluralName": "billing-infomations",
+    "displayName": "Billing Infomation",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "company_name": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "postcode": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}

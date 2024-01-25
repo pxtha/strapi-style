@@ -25,6 +25,16 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::product.product"
+    },
+    "product_variant": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product-variant.product-variant"
+    },
+    "size": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::size.size"
     }
   }
 }

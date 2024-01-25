@@ -784,6 +784,51 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiBillingInfomationBillingInfomation
+  extends Schema.CollectionType {
+  collectionName: 'billing_infomations';
+  info: {
+    singularName: 'billing-infomation';
+    pluralName: 'billing-infomations';
+    displayName: 'Billing Infomation';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    first_name: Attribute.String;
+    last_name: Attribute.String;
+    company_name: Attribute.String;
+    country: Attribute.String;
+    address: Attribute.String;
+    city: Attribute.String;
+    postcode: Attribute.String;
+    phone: Attribute.String;
+    email: Attribute.String;
+    users_permissions_user: Attribute.Relation<
+      'api::billing-infomation.billing-infomation',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::billing-infomation.billing-infomation',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::billing-infomation.billing-infomation',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiCartCart extends Schema.CollectionType {
   collectionName: 'carts';
   info: {
@@ -807,6 +852,12 @@ export interface ApiCartCart extends Schema.CollectionType {
       'oneToOne',
       'api::product.product'
     >;
+    product_variant: Attribute.Relation<
+      'api::cart.cart',
+      'oneToOne',
+      'api::product-variant.product-variant'
+    >;
+    size: Attribute.Relation<'api::cart.cart', 'oneToOne', 'api::size.size'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -923,6 +974,12 @@ export interface ApiOrderOrder extends Schema.CollectionType {
       'oneToMany',
       'api::order-item.order-item'
     >;
+    description: Attribute.Text;
+    billing_infomation: Attribute.Relation<
+      'api::order.order',
+      'oneToOne',
+      'api::billing-infomation.billing-infomation'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -959,11 +1016,20 @@ export interface ApiOrderItemOrderItem extends Schema.CollectionType {
       'api::order.order'
     >;
     quantity: Attribute.Integer;
-    subtotal: Attribute.Decimal;
     product_variant: Attribute.Relation<
       'api::order-item.order-item',
       'oneToOne',
       'api::product-variant.product-variant'
+    >;
+    size: Attribute.Relation<
+      'api::order-item.order-item',
+      'oneToOne',
+      'api::size.size'
+    >;
+    product: Attribute.Relation<
+      'api::order-item.order-item',
+      'oneToOne',
+      'api::product.product'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1007,11 +1073,6 @@ export interface ApiProductProduct extends Schema.CollectionType {
     sale_price: Attribute.Decimal;
     end_discount_time: Attribute.DateTime;
     start_discount_time: Attribute.DateTime;
-    product_variants: Attribute.Relation<
-      'api::product.product',
-      'oneToMany',
-      'api::product-variant.product-variant'
-    >;
     categories: Attribute.Relation<
       'api::product.product',
       'manyToMany',
@@ -1036,6 +1097,11 @@ export interface ApiProductProduct extends Schema.CollectionType {
       'api::product.product',
       'oneToMany',
       'api::review.review'
+    >;
+    product_variants: Attribute.Relation<
+      'api::product.product',
+      'oneToMany',
+      'api::product-variant.product-variant'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1074,6 +1140,11 @@ export interface ApiProductVariantProductVariant extends Schema.CollectionType {
       'api::product-variant.product-variant',
       'oneToMany',
       'api::size.size'
+    >;
+    product: Attribute.Relation<
+      'api::product-variant.product-variant',
+      'manyToOne',
+      'api::product.product'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1296,6 +1367,7 @@ declare module '@strapi/types' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::billing-infomation.billing-infomation': ApiBillingInfomationBillingInfomation;
       'api::cart.cart': ApiCartCart;
       'api::category.category': ApiCategoryCategory;
       'api::home.home': ApiHomeHome;

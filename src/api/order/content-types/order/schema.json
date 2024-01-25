@@ -42,6 +42,14 @@
       "relation": "oneToMany",
       "target": "api::order-item.order-item",
       "mappedBy": "order_id"
+    },
+    "description": {
+      "type": "text"
+    },
+    "billing_infomation": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::billing-infomation.billing-infomation"
     }
   }
 }
